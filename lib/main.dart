@@ -63,8 +63,6 @@ class _HomeState extends State<Home> {
     await widget.databaseBrain
         .insertChat(Chat(id: 3, name: 'Ben', messages: ['Hi! there', 'Bye ']));
     await widget.databaseBrain.insertChat(
-        Chat(id: 3, name: 'Nix', messages: ['lorem Ipsum', 'blah blah ']));
-    await widget.databaseBrain.insertChat(
         Chat(id: 3, name: 'Black', messages: ['Good Morning', 'Good Night ']));
   }
 
