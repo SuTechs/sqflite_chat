@@ -1,4 +1,4 @@
-# internship_chat
+# sqflite_chat_flutter
 
-Chatting app based on sqflite
+Flutter Chatting app based on sqflite
 
