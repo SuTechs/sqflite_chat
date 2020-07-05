@@ -55,7 +55,9 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Chat> chats = [];
-  createStartingDatabase() async {
+  bool isShowLoading = true;
+
+  void createStartingDatabase() async {
     await widget.databaseBrain
         .insertChat(Chat(id: 1, name: 'Su Mit', messages: ['Hi', 'Hello']));
     await widget.databaseBrain.insertChat(
@@ -64,58 +66,67 @@ class _HomeState extends State<Home> {
         .insertChat(Chat(id: 3, name: 'Ben', messages: ['Hi! there', 'Bye ']));
     await widget.databaseBrain.insertChat(
         Chat(id: 3, name: 'Black', messages: ['Good Morning', 'Good Night ']));
+    await widget.databaseBrain.insertChat(Chat(
+        id: 4,
+        name: 'Nix',
+        messages: ['Low auss aa sau syus uhw', 'Goo yggd Nissh su aght ']));
+
+    setState(() {
+      isShowLoading = false;
+    });
   }
 
   @override
-  void initState() {
+  Widget build(BuildContext context) {
     widget.databaseBrain.getChats().then((value) {
       if (value.length < 1)
         createStartingDatabase();
       else
         chats = value;
+
       setState(() {
-        print('Database Loaded');
+        isShowLoading = false;
       });
     });
-    super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Messages (${chats.length})',
-                style: kHeadingTextStyle,
+        child: isShowLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      'Messages (${chats.length})',
+                      style: kHeadingTextStyle,
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: chats.length,
+                        itemBuilder: (context, index) {
+                          return ChatListTile(
+                            name: chats[index].name,
+                            lastMessage: chats[index].messages.last,
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => ChatScreen(
+                                        chat: chats[index],
+                                        databaseBrain: widget.databaseBrain,
+                                      )),
+                            ).then((value) {
+                              setState(() {});
+                            }),
+                          );
+                        }),
+                  ),
+                ],
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                  itemCount: chats.length,
-                  itemBuilder: (context, index) {
-                    return ChatListTile(
-                      name: chats[index].name,
-                      lastMessage: chats[index].messages.last,
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => ChatScreen(
-                                  chat: chats[index],
-                                  databaseBrain: widget.databaseBrain,
-                                )),
-                      ).then((value) {
-                        setState(() {});
-                      }),
-                    );
-                  }),
-            ),
-          ],
-        ),
       ),
     );
   }

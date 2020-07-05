@@ -26,7 +26,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Conversation with\nSu Mit',
+                'Conversation with\n${widget.chat.name}',
                 style: kHeadingTextStyle,
               ),
             ),
