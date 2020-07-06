@@ -40,10 +40,10 @@ class DatabaseBrain {
   Future<List<Chat>> getChats() async {
     final Database db = await database;
 
-    // Query the table for all The Dogs.
+    // Query the table for all The Chat.
     final List<Map<String, dynamic>> maps = await db.query('chats');
 
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
+    // Convert the List<Map<String, dynamic> into a List<Chat>.
     return List.generate(maps.length, (i) {
       return Chat(
         name: maps[i]['name'],
@@ -57,13 +57,13 @@ class DatabaseBrain {
     // Get a reference to the database.
     final db = await database;
 
-    // Update the given Dog.
+    // Update the given Chat.
     await db.update(
       'chats',
       chat.toMap(),
-      // Ensure that the Dog has a matching id.
+      // Ensure that the Chat has a matching id.
       where: "id = ?",
-      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      // Pass the Chat's id as a whereArg to prevent SQL injection.
       whereArgs: [chat.id],
     );
   }
